@@ -1,5 +1,5 @@
 <template>
-     <h1>Remember When </h1>
+     <h1>RemembrWhen </h1>
     <v-card class="outterpart">
       <v-card class="image mx-auto px-6 py-8" max-width="344">
         <v-form
