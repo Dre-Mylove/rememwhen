@@ -1,13 +1,28 @@
 <template>
-  <v-app-bar density="compact">
-    <template v-slot:prepend>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-    </template>
-
-    <v-app-bar-title>Photo Album</v-app-bar-title>
-
-    <v-btn class="uploadbtn" @click="showDialog">Upload</v-btn>
+  <v-app-bar >
+    <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-sm-none"></v-app-bar-nav-icon>
+    <v-toolbar-title class="title">{{ title }}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn class="navbtns" v-if="!showupload" :to="'/home'"> Home</v-btn>
+    <v-btn class="navbtns" v-if="showupload"  @click="showDialog">Upload</v-btn>
+    <v-btn class="navbtns">New Wall</v-btn>
+    <v-btn class="navbtns">Friends</v-btn>
+    
+    <v-btn class="navbtns" :to="'/'">Logout</v-btn>
   </v-app-bar>
+
+  <v-navigation-drawer v-model="drawer" app>
+    <v-list>
+      <v-list-item v-for="item in items" :key="item.title" link>
+        <v-list-item-icon>
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 
   <!--Dialog pop up to upload pictures-->
 
@@ -17,7 +32,7 @@
       <v-btn icon @click="closeDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title class="dialog-title">
+      <v-toolbar-title class="dialog-title" >
         Upload Photo
       </v-toolbar-title>
     </v-toolbar>
@@ -36,13 +51,26 @@ export default {
 
   setup() {
     const isActive = ref(false);
-    const dialog = ref(false);
+    const dialog = ref(false);    
+    const drawer = ref(false);
 
     return {
       isActive,
       dialog,
+      drawer,
     };
   },
+
+    props: {
+      title: {
+        type: String,
+      },
+      showupload: {
+        type: Boolean,
+        
+      },
+    },
+ 
 
   methods: {
     toggle() {
@@ -62,21 +90,30 @@ export default {
 
 <style scoped>
 .v-app-bar {
-    background-color: #a0c4ff;
+    background-color: #edf6f9;
 }
 
+.title {
+    color: #000000;
+    font-size: 40px;
+    font-weight: bold;
+    
+    margin: 6%;
+}
+
+.navbtns {
+    background-color: #83c5be;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px;
+}
 .v-app-bar-title {
     color: #000000;
     font-size: 40px;
     font-weight: bold;
-    text-align: center;
-}
-
-.uploadbtn {
-    background-color: #ffd6a5;
-    color: #000000;
-    font-size: 15px;
-    font-weight: bold;
+    margin: auto;
     text-align: center;
 }
 

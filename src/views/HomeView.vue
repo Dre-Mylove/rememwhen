@@ -1,6 +1,7 @@
 <template>
     <div class="home-view">
-    <NavBar />
+    <!--Setting title and upload button to true for this view-->
+    <NavBar :title="title" :showupload="showUpload" />
     <Image />
     </div>
 </template>
@@ -15,13 +16,19 @@ export default {
     Image,
     NavBar,
   },
-}
 
+  data() {
+    return {
+      title: 'Photo Album',
+      showUpload: true,
+    }
+  }
+}
 </script>
 
 <style scoped>
 .home-view {
-  background-color: #a0c4ff;
+  background-color: #edf6f9;
   height: 100%;
   
 }

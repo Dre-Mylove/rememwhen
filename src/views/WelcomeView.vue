@@ -23,7 +23,7 @@ export default defineComponent({
 
 <style scoped>
 .welcome-view {
-  background-color: #a0c4ff; /* Update the background color to red */
+  background-color: #edf6f9; /* Update the background color to red */
   height: 100vh;
   
 }

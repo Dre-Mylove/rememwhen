@@ -36,12 +36,13 @@
             size="large"
             type="submit"
             variant="elevated"
+            :to="'/Home'"
           >
             Sign In
           </v-btn>
         </v-form>
       </v-card>
-     
+      <div class="signup">Dont have an account? <a href>Sign Up</a></div>
     </v-card>
   </template>
 
@@ -54,14 +55,26 @@ export default {
 
 <style scoped>
 .image {
-    margin-top: 10%;
+    margin-top: 5%;
     background-color: black;
     
 }
 
+div {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    
+    margin-bottom: 5%;
+}
+
 .v-btn {
-  background-color: #a0c4ff;
+  background-color: #83c5be;
   color: black;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .outterpart {

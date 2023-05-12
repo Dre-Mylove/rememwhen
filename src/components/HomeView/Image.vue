@@ -2,7 +2,7 @@
   <v-row>
     <v-col v-for="n in 9" :key="n" cols="4">
       <v-card class="outtercard">
-        <v-card class="innercard">
+        <v-card class="innercard" :to="'/sharedwall'">
           <v-img
             :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
             :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
@@ -19,7 +19,7 @@
             </template>
           </v-img>
         </v-card>
-        <h3>computer science</h3>
+        <h3>Example Text</h3>
       </v-card>
     </v-col>
   </v-row>
@@ -34,10 +34,11 @@ export default {
 <style scoped>
 .outtercard {
   background-color: rgb(255, 255, 255);
-  width: 70%;
+  width: 65%;
   margin: auto;
-  border: 5px solid black;
+  border: 3px solid black;
   height: 100%;
+  
 }
 
 .innercard {
@@ -54,8 +55,12 @@ export default {
 h3 {
   font-family: "Shadows Into Light Two", cursive;
   font-size: 30px;
-
-  line-height: 5px;
+  line-height: 10px;
   text-align: center;
+  margin-bottom: 10%;
+}
+
+.v-col {
+  margin-top: 3vh;
 }
 </style>
