@@ -28,7 +28,7 @@
 
   <v-dialog  transition="dialog-top-transition"  v-model="dialog">
     <v-card>
-    <v-toolbar>
+    <v-toolbar class="dialogbar">
       <v-btn icon @click="closeDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -37,8 +37,25 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-card class="in-development">
-      <v-img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg"></v-img>
+      <v-img :src="noteImage" contain v-if="noteImage"></v-img>
     </v-card>
+    <v-file-input
+        label="File input"
+        accept="image/*"
+        variant="solo-filled"
+        
+        @change="previewImage"
+      ></v-file-input>
+    <v-text-field
+      class="input"
+      dense
+      outlined
+      label="Caption"
+      maxLength="20"
+      prepend-icon="mdi-message"
+      >
+      </v-text-field>
+      <v-btn class="submitbtn" @click="closeDialog">Submit</v-btn>
     </v-card>
   </v-dialog>
 </template>
@@ -53,12 +70,20 @@ export default {
     const isActive = ref(false);
     const dialog = ref(false);    
     const drawer = ref(false);
+    const noteImage =ref("https://static.vecteezy.com/system/resources/thumbnails/016/776/618/small_2x/an-old-polaroid-camera-in-color-and-in-black-and-white-the-concept-of-the-old-polaroid-technique-free-vector.jpg");
 
     return {
       isActive,
       dialog,
       drawer,
+      noteImage,
     };
+  },
+
+  data() {
+    return {
+      file: null,
+    }
   },
 
     props: {
@@ -83,6 +108,16 @@ export default {
 
     closeDialog() {
       this.dialog = false;
+    },
+
+    previewImage(e) {
+      const file = e.target.files[0];
+      this.file = file;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        this.noteImage = e.target.result;
+      };
     },
   },
 };
@@ -133,7 +168,18 @@ export default {
     font-weight: bold;
     text-align: center;
     height: 100%;
-    width: 30%;
+    width: 40%;
+}
+
+.dialogbar {
+    background-color: #edf6f9;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    height: 10%;
+    width: 100%;
+    margin: 0%;
 }
 
 .dialog-title {
@@ -142,5 +188,38 @@ export default {
     font-weight: bold;
     text-align: center;
     margin-left: -10%;
+}
+
+.v-text-field {
+    color: #000000;
+    font-size: 15px;
+    font-family: "Shadows Into Light Two", cursive;
+    font-weight: bold;
+    text-align: center;
+    height: 10%;
+    width: 75%;
+    margin-inline: 10%;
+}
+
+.submitbtn {
+  background-color: #83c5be;
+    color: #000000;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px;
+    margin-inline: 40%;
+    margin-bottom: 5%;
+}
+
+.v-file-input {
+  color: #000000;
+    font-size: 15px;
+    font-family: "Shadows Into Light Two", cursive;
+    font-weight: bold;
+    text-align: center;
+    height: 10%;
+    width: 75%;
+    margin-inline: 10%;
 }
 </style>
