@@ -39,6 +39,12 @@ export default {
   border: 3px solid black;
   height: 100%;
   
+  
+}
+
+.outtercard:hover {
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.1), 0 16px 16px rgba(0, 0, 0, 0.1),
+    0 16px 16px rgba(0, 0, 0, 0.1);
 }
 
 .innercard {

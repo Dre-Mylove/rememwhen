@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import WelcomeView from '../views/WelcomeView.vue'
 import HomeView from '../views/HomeView.vue'
 import SharedWallView from '../views/SharedWallView.vue'
+import FriendsView from '../views/FriendsView.vue'
 
 
 const routes = [
@@ -27,6 +28,11 @@ const routes = [
     path: '/sharedwall',
     name: 'sharedwall',
     component: SharedWallView
+  },
+  {
+    path: '/friends',
+    name: 'friends',
+    component: FriendsView
   }
 ]
 

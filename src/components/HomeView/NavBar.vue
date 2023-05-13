@@ -3,10 +3,10 @@
     <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-sm-none"></v-app-bar-nav-icon>
     <v-toolbar-title class="title">{{ title }}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn class="navbtns" v-if="!showupload" :to="'/home'"> Home</v-btn>
+    <v-btn class="navbtns" v-if="!showupload" :to="'/home'" > Home</v-btn>
     <v-btn class="navbtns" v-if="showupload"  @click="showDialog">Upload</v-btn>
     <v-btn class="navbtns">New Wall</v-btn>
-    <v-btn class="navbtns">Friends</v-btn>
+    <v-btn class="navbtns" :to="'/friends'">Friends</v-btn>
     
     <v-btn class="navbtns" :to="'/'">Logout</v-btn>
   </v-app-bar>
@@ -61,55 +61,36 @@
 </template>
 
 <script>
-import { ref } from "vue";
-
 export default {
   name: "NavBar",
-
-  setup() {
-    const isActive = ref(false);
-    const dialog = ref(false);    
-    const drawer = ref(false);
-    const noteImage =ref("https://static.vecteezy.com/system/resources/thumbnails/016/776/618/small_2x/an-old-polaroid-camera-in-color-and-in-black-and-white-the-concept-of-the-old-polaroid-technique-free-vector.jpg");
-
-    return {
-      isActive,
-      dialog,
-      drawer,
-      noteImage,
-    };
+  props: {
+    title: {
+      type: String,
+    },
+    showupload: {
+      type: Boolean,
+    },
   },
-
   data() {
     return {
+      isActive: false,
+      dialog: false,
+      drawer: false,
+      noteImage:
+        "https://static.vecteezy.com/system/resources/thumbnails/016/776/618/small_2x/an-old-polaroid-camera-in-color-and-in-black-and-white-the-concept-of-the-old-polaroid-technique-free-vector.jpg",
       file: null,
-    }
+    };
   },
-
-    props: {
-      title: {
-        type: String,
-      },
-      showupload: {
-        type: Boolean,
-        
-      },
-    },
- 
-
   methods: {
     toggle() {
       this.isActive = !this.isActive;
     },
-
     showDialog() {
       this.dialog = true;
     },
-
     closeDialog() {
       this.dialog = false;
     },
-
     previewImage(e) {
       const file = e.target.files[0];
       this.file = file;
@@ -141,6 +122,7 @@ export default {
     color: #000000;
     font-size: 15px;
     font-weight: bold;
+    text-transform: capitalize;
     text-align: center;
     margin: 15px;
 }
