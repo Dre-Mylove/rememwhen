@@ -42,8 +42,9 @@
           </v-btn>
         </v-form>
       </v-card>
-      <div class="signup">Dont have an account? <a href>Sign Up</a></div>
-    </v-card>
+      <div class="signup">
+        Don't have an account? <a href="#" @click.prevent="$emit('toggleSignUp')">Sign Up</a>
+      </div>    </v-card>
   </template>
 
 <script>
@@ -76,6 +77,10 @@ div {
   font-size: 20px;
   font-weight: bold;
 }
+
+a {
+    color: #83c5be;
+    text-decoration: none;}
 
 .outterpart {
     background-color:rgb(255, 255, 255);

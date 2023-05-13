@@ -1,6 +1,7 @@
 <template>
   <div class="welcome-view">
-    <LogIn />
+    <LogIn v-if="!showSignUp" @toggleSignUp="toggleSignUp" />
+    <SignUp v-else @toggleSignUp="toggleSignUp" />
   </div>
 </template>
 
@@ -10,6 +11,7 @@ import { defineComponent } from 'vue';
 // Components
 import TitleHeader from '../components/WelcomeView/TitleHeader.vue';
 import LogIn from '../components/WelcomeView/LogIn.vue';
+import SignUp from '../components/WelcomeView/SignUp.vue';
 
 export default defineComponent({
   name: 'WelcomeView',
@@ -17,6 +19,19 @@ export default defineComponent({
   components: {
     TitleHeader,
     LogIn,
+    SignUp,
+  },
+
+  data() {
+    return {
+      showSignUp: false,
+    };
+  },
+
+  methods: {
+    toggleSignUp() {
+      this.showSignUp = !this.showSignUp;
+    },
   },
 });
 </script>

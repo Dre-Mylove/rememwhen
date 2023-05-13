@@ -3,6 +3,7 @@ import WelcomeView from '../views/WelcomeView.vue'
 import HomeView from '../views/HomeView.vue'
 import SharedWallView from '../views/SharedWallView.vue'
 
+
 const routes = [
   {
     path: '/',
