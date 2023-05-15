@@ -105,7 +105,6 @@
 .v-text-field {
     color: #000000;
     font-size: 15px;
-    font-family: "Shadows Into Light Two", cursive;
     font-weight: bold;
     text-align: center;
     height: 10%;
