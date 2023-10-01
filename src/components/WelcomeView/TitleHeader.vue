@@ -1,6 +1,6 @@
 <template>
   <v-app-bar class="appbar">
-    <v-toolbar-title>RemembrWhen</v-toolbar-title>
+    <v-toolbar-title>Friend Venn</v-toolbar-title>
   </v-app-bar>
 </template>
 

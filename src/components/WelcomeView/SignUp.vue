@@ -1,6 +1,6 @@
 <template>
     <div>
-    <h1>RemembrWhen</h1>
+    <h1>Friend Venn</h1>
     <v-card class="outterpart">
       <v-card class="image mx-auto px-6 py-8" max-width="344">
         <v-form v-model="form" @submit.prevent="onSubmit">
@@ -53,6 +53,7 @@
             color="#83c5be"
             outlined
             :to="'/Home'"
+            @click="onSubmit"
           >
             Submit
           </v-btn>
@@ -66,6 +67,9 @@
   </template>
   
   <script>
+  import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+  import { app } from '@/firebase/firebase'
+
   export default {
     name: "SignUp",
     data() {
@@ -86,7 +90,15 @@
     },
     methods: {
       onSubmit() {
-        // Implement your form submission logic here
+        const auth = getAuth(app);
+        createUserWithEmailAndPassword(auth, this.email, this.password)
+          .then((userCredential ) => {
+            const user = userCredential.user;
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+          })
       },
     },
   };
