@@ -102,26 +102,26 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
+      this.loading = true;
       const auth = getAuth(app);
-      createUserWithEmailAndPassword(auth, this.email, this.password)
-        .then((userCredential) => {
-          const user = userCredential.user;
+      const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password);
 
-          setDoc(doc(db, "users", user.uid), {
-            username: this.username,
-            email: this.email,
-          });
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-        setDoc(doc(db, "username", this.username), {
-            email: this.email,
-            uid: user.uid
-          });
-        
+      // Save the user document
+      const userRef = doc(db, "users", userCredential.user.uid);
+      setDoc(userRef, {
+        username: this.username,
+        email: this.email,
+      });
+
+      // Save the username document
+      const usernameRef = doc(db, "username", this.username);
+      setDoc(usernameRef, {
+        email: this.email,
+        uid: userCredential.user.uid
+      });
+
+      this.loading = false;
     },
   },
 };
