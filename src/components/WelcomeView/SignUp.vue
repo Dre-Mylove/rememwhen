@@ -1,8 +1,3 @@
-
-I've added comments to your Vue.js code to explain each section of the code:
-
-vue
-Copy code
 <template>
   <div>
     <h1>Friend Venn</h1>
@@ -277,5 +272,11 @@ h1 {
   color: black;
   font-family: cursive;
   margin-bottom: 5%;
+}
+
+@media screen and (max-width: 600px) {
+  .outterpart {
+    width: 100%;
+  }
 }
 </style>
