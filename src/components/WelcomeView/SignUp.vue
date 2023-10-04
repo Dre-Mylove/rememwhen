@@ -1,9 +1,17 @@
+
+I've added comments to your Vue.js code to explain each section of the code:
+
+vue
+Copy code
 <template>
   <div>
     <h1>Friend Venn</h1>
     <v-card class="outterpart">
       <v-card class="image mx-auto px-6 py-8" max-width="344">
         <v-form v-model="form" @submit.prevent="onSubmit">
+          <!-- User Registration Form -->
+          
+          <!-- First Name Field (Commented out) -->
           <!--
           <v-text-field
             v-model="firstname"
@@ -14,31 +22,28 @@
             label="First Name"
           ></v-text-field>
           -->
+
+          <!-- User Name Field -->
           <v-text-field
             v-model="username"
             :rules="[required, usernameValidator]"
             class="mb-2"
             clearable
             label="User Name"
-            @input="filterUsername"
-            @keyup="debouncedCheckUsername"
+            @input="filterUsername" 
+            @keyup="debouncedCheckUsername" 
             @focus="isFocused = true"
             @blur="isFocused = false"
-            ><span
-              v-if="
-                usernameAvailable &&
-                username.length >= 3 &&
-                username.length <= 15
-              "
-              class="checkmark"
-              >&#10004;</span
-            >
-            <span v-if="!usernameAvailable && username.length >= 3" class="x"
-              >&#10006;</span
-            >
-            <span v-if="isFocused">@</span></v-text-field
           >
+            <!-- Checkmark (✔) displayed when conditions met -->
+            <span v-if="usernameAvailable && username.length >= 3 && username.length <= 15" class="checkmark">&#10004;</span>
+            <!-- 'X' (✖) displayed when username is unavailable and length condition met -->
+            <span v-if="!usernameAvailable && username.length >= 3" class="x">&#10006;</span>
+            <!-- '@' displayed when the field is focused -->
+            <span v-if="isFocused">@</span>
+          </v-text-field>
 
+          <!-- Last Name Field (Commented out) -->
           <!--
           <v-text-field
             v-model="lastname"
@@ -49,6 +54,8 @@
             label="Last Name"
           ></v-text-field>
           -->
+
+          <!-- Email Field -->
           <v-text-field
             v-model="email"
             :readonly="loading"
@@ -58,6 +65,7 @@
             label="Email"
           ></v-text-field>
 
+          <!-- Password Field -->
           <v-text-field
             v-model="password"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -71,6 +79,7 @@
           ></v-text-field>
           <br />
 
+          <!-- Submit Button -->
           <v-btn
             :loading="loading"
             :disabled="!usernameAvailable"
@@ -86,6 +95,7 @@
           </v-btn>
         </v-form>
       </v-card>
+      <!-- Sign In Link -->
       <div class="signin">
         Already have an account?
         <a href="#" @click.prevent="$emit('toggleSignUp')">Sign In</a>
@@ -104,6 +114,7 @@ export default {
   name: "SignUp",
   data() {
     return {
+      // Data properties for the form
       form: true,
       firstname: "",
       lastname: "",
@@ -120,6 +131,7 @@ export default {
         min: (value) => value.length >= 8 || "Min 8 characters",
         username: (value) => !!value || "Required.",
       },
+      // Validator for username to allow only specific characters
       usernameValidator: (value) => {
         const regex = /^[a-zA-Z0-9_]+$/;
         if (!regex.test(value)) {
@@ -130,6 +142,7 @@ export default {
     };
   },
   methods: {
+    // Method to debounce the username checking
     debouncedCheckUsername() {
       // Wrap the debounce function in a Promise
       return new Promise((resolve) => {
@@ -140,6 +153,7 @@ export default {
         }, 100)();
       });
     },
+    // Method to check if the username is available
     async checkUsername() {
       try {
         // Check if the username already exists
@@ -162,10 +176,12 @@ export default {
         this.usernameAvailable = false; // Set to false in case of an error
       }
     },
+    // Method to filter username input to allow only specific characters
     filterUsername() {
       // Remove characters that are not allowed
       this.username = this.username.replace(/[^a-zA-Z0-9_]/g, '');
     },
+    // Method to handle form submission
     async onSubmit() {
       this.loading = true;
       const auth = getAuth(app);
