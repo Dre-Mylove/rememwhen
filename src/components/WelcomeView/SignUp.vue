@@ -21,9 +21,10 @@
           <!-- User Name Field -->
           <v-text-field
             v-model="username"
-            :rules="[required, usernameValidator]"
+            :rules="[rules.required, usernameValidator, rules.usernameMax]"
             class="mb-2"
             clearable
+            counter
             label="User Name"
             @input="filterUsername" 
             @keyup="debouncedCheckUsername" 
@@ -54,7 +55,7 @@
           <v-text-field
             v-model="email"
             :readonly="loading"
-            :rules="[required]"
+            :rules="[rules.required]"
             class="mb-2"
             clearable
             label="Email"
@@ -120,11 +121,10 @@ export default {
       loading: false,
       usernameAvailable: false,
       isFocused: false,
-      required: (value) => !!value || "Required.",
       rules: {
         required: (value) => !!value || "Required.",
-        min: (value) => value.length >= 8 || "Min 8 characters",
-        username: (value) => !!value || "Required.",
+        usernameMax: (value) => value.length <= 15 || "Max 15 characters",
+        min: (value) => value.length >= 8 || "Min 8 characters",        
       },
       // Validator for username to allow only specific characters
       usernameValidator: (value) => {
@@ -154,7 +154,7 @@ export default {
         // Check if the username already exists
         const username = this.username;
 
-        if (username.length >= 3 && username.length <= 15) {
+        if (username.length >= 1 && username.length <= 15) {
           const usernameRef = doc(db, "username", username.toLowerCase());
           const docSnapshot = await getDoc(usernameRef);
 
