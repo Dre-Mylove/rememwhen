@@ -16,11 +16,11 @@
           -->
           <v-text-field
             v-model="username"
-            :readonly="loading"
             :rules="[required]"
             class="mb-2"
             clearable
             label="User Name"
+            @keyup="debouncedCheckUsername"
           ></v-text-field>
 
           <!--
@@ -57,6 +57,7 @@
 
           <v-btn
             :loading="loading"
+            :disabled="!usernameAvailable"
             block
             size="large"
             type="submit"
@@ -80,7 +81,8 @@
 <script>
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app, db } from "@/firebase/firebase";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
+import debounce from "lodash/debounce";
 
 export default {
   name: "SignUp",
@@ -94,34 +96,78 @@ export default {
       password: "",
       show1: false,
       loading: false,
+      usernameAvailable: false, // Initialize usernameAvailable
       required: (value) => !!value || "Required.",
       rules: {
         required: (value) => !!value || "Required.",
         min: (value) => value.length >= 8 || "Min 8 characters",
+        username: (value) => !!value || "Required.",
       },
     };
   },
   methods: {
+    debouncedCheckUsername() {
+      // Wrap the debounce function in a Promise
+      return new Promise((resolve) => {
+        debounce(async () => {
+          await this.checkUsername();
+          console.log("Debounced function called");
+          resolve(); // Resolve the Promise when checkUsername is done
+        }, 500)();
+      });
+    },
+    async checkUsername() {
+      try {
+        // Check if the username already exists
+        const username = this.username;
+
+        if (username.length >= 3 && username.length <= 15) {
+          const usernameRef = doc(db, "username", username);
+          const docSnapshot = await getDoc(usernameRef);
+
+          this.usernameAvailable = !docSnapshot.exists();
+          console.log("Username available:", this.usernameAvailable);
+        } else {
+          // Handle invalid username length if needed
+          this.usernameAvailable = false;
+          console.log("Username available:", this.usernameAvailable);
+        }
+      } catch (error) {
+        // Handle any errors that occur during the database query
+        console.error("Error checking username:", error);
+        this.usernameAvailable = false; // Set to false in case of an error
+      }
+    },
     async onSubmit() {
       this.loading = true;
       const auth = getAuth(app);
-      const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password);
 
-      // Save the user document
-      const userRef = doc(db, "users", userCredential.user.uid);
-      setDoc(userRef, {
-        username: this.username,
-        email: this.email,
-      });
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          this.email,
+          this.password
+        );
 
-      // Save the username document
-      const usernameRef = doc(db, "username", this.username);
-      setDoc(usernameRef, {
-        email: this.email,
-        uid: userCredential.user.uid
-      });
+        // Save the user document
+        const userRef = doc(db, "users", userCredential.user.uid);
+        await setDoc(userRef, {
+          username: this.username,
+          email: this.email,
+        });
 
-      this.loading = false;
+        // Save the username document
+        const usernameRef = doc(db, "usernames", this.username);
+        await setDoc(usernameRef, {
+          email: this.email,
+          uid: userCredential.user.uid,
+        });
+
+        this.loading = false;
+      } catch (error) {
+        console.error("Error creating user:", error);
+        this.loading = false;
+      }
     },
   },
 };
