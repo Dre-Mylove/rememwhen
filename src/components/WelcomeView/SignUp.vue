@@ -96,7 +96,7 @@ export default {
       password: "",
       show1: false,
       loading: false,
-      usernameAvailable: false, // Initialize usernameAvailable
+      usernameAvailable: false,
       required: (value) => !!value || "Required.",
       rules: {
         required: (value) => !!value || "Required.",
@@ -112,7 +112,7 @@ export default {
         debounce(async () => {
           await this.checkUsername();
           console.log("Debounced function called");
-          resolve(); // Resolve the Promise when checkUsername is done
+          resolve(); 
         }, 500)();
       });
     },
