@@ -16,12 +16,28 @@
           -->
           <v-text-field
             v-model="username"
-            :rules="[required]"
+            :rules="[required, usernameValidator]"
             class="mb-2"
             clearable
             label="User Name"
+            @input="filterUsername"
             @keyup="debouncedCheckUsername"
-          ></v-text-field>
+            @focus="isFocused = true"
+            @blur="isFocused = false"
+            ><span
+              v-if="
+                usernameAvailable &&
+                username.length >= 3 &&
+                username.length <= 15
+              "
+              class="checkmark"
+              >&#10004;</span
+            >
+            <span v-if="!usernameAvailable && username.length >= 3" class="x"
+              >&#10006;</span
+            >
+            <span v-if="isFocused">@</span></v-text-field
+          >
 
           <!--
           <v-text-field
@@ -97,11 +113,19 @@ export default {
       show1: false,
       loading: false,
       usernameAvailable: false,
+      isFocused: false,
       required: (value) => !!value || "Required.",
       rules: {
         required: (value) => !!value || "Required.",
         min: (value) => value.length >= 8 || "Min 8 characters",
         username: (value) => !!value || "Required.",
+      },
+      usernameValidator: (value) => {
+        const regex = /^[a-zA-Z0-9_]+$/;
+        if (!regex.test(value)) {
+          return 'Only letters, numbers, and underscores are allowed.';
+        }
+        return true;
       },
     };
   },
@@ -112,8 +136,8 @@ export default {
         debounce(async () => {
           await this.checkUsername();
           console.log("Debounced function called");
-          resolve(); 
-        }, 500)();
+          resolve();
+        }, 100)();
       });
     },
     async checkUsername() {
@@ -122,7 +146,7 @@ export default {
         const username = this.username;
 
         if (username.length >= 3 && username.length <= 15) {
-          const usernameRef = doc(db, "username", username);
+          const usernameRef = doc(db, "username", username.toLowerCase());
           const docSnapshot = await getDoc(usernameRef);
 
           this.usernameAvailable = !docSnapshot.exists();
@@ -138,6 +162,10 @@ export default {
         this.usernameAvailable = false; // Set to false in case of an error
       }
     },
+    filterUsername() {
+      // Remove characters that are not allowed
+      this.username = this.username.replace(/[^a-zA-Z0-9_]/g, '');
+    },
     async onSubmit() {
       this.loading = true;
       const auth = getAuth(app);
@@ -145,15 +173,15 @@ export default {
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
-          this.email,
+          this.email.toLowerCase(),
           this.password
         );
 
         // Save the user document
         const userRef = doc(db, "users", userCredential.user.uid);
         await setDoc(userRef, {
-          username: this.username,
-          email: this.email,
+          username: this.username.toLowerCase(),
+          email: this.email.toLowerCase(),
         });
 
         // Save the username document
@@ -177,6 +205,20 @@ export default {
 .image {
   margin-top: 5%;
   background-color: black;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: green;
+}
+
+.x {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: red;
 }
 
 div {
