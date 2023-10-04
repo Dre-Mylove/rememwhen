@@ -35,7 +35,7 @@
             <!-- 'X' (✖) displayed when username is unavailable and length condition met -->
             <span v-if="!usernameAvailable && username.length >= 3" class="x">&#10006;</span>
             <!-- '@' displayed when the field is focused -->
-            <span v-if="isFocused">@</span>
+            <span v-if="isFocused | username.length != 0">@</span>
           </v-text-field>
 
           <!-- Last Name Field (Commented out) -->
